@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPINTRONIC · HEÚREMA · ROOT0</title>
+<meta name="description" content="Spintronic: a bit stored not as charge but as a direction of spin. A spin-transfer-torque MRAM cell — the magnetization vector switched by a spin-polarized current, governed by the Landau-Lifshitz-Gilbert equation. Live 2D-canvas interactive. The fourth carrier (charge, light, lattice, spin), completing the tensor. A ROOT0 hardware disclosure.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#17120d; --ink:#ece3d5; --dim:#a99a86; --copper:#c8843a; --copper-hi:#e0a24e;
+    --cyan:#6bb0c0; --green:#6fbf8a; --violet:#b98bff; --line:rgba(200,132,58,.30); --line2:rgba(200,132,58,.14); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%;background:var(--bg);color:var(--ink);font-family:Newsreader,Georgia,serif;line-height:1.62;
+    background-image:radial-gradient(ellipse 60% 42% at 50% 4%,rgba(200,132,58,.06),transparent 60%),radial-gradient(ellipse 40% 30% at 84% 96%,rgba(185,139,255,.05),transparent 60%)}
+  .wrap{max-width:900px;margin:0 auto;padding:0 22px 80px;position:relative}
+  .top{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;padding:12px 0;border-bottom:1px solid var(--line2);color:var(--copper)}
+  .top a{color:var(--copper);text-decoration:none} .top a:hover{color:var(--copper-hi)}
+  header{text-align:center;padding:40px 0 6px}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--copper)}
+  h1{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(24px,5vw,40px);color:var(--copper-hi);letter-spacing:.03em;margin:12px 0 10px}
+  .lede{font-size:clamp(16px,2.3vw,20px);font-weight:300;max-width:680px;margin:0 auto;color:var(--ink)}
+  .lede b{color:var(--copper-hi);font-weight:500}
+  section{margin:40px 0 0}
+  h2{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--copper);margin:0 0 12px;border-top:1px solid var(--line2);padding-top:16px}
+  canvas{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:4px;background:#100c07;touch-action:none}
+  .controls{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:14px 0 0;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim)}
+  .controls label{display:flex;flex-direction:column;gap:4px;min-width:180px;flex:1}
+  .controls .val{color:var(--copper-hi)}
+  input[type=range]{accent-color:var(--copper);width:100%}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  button{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:9px 14px;border-radius:3px;cursor:pointer;color:var(--copper-hi);background:transparent;border:1px solid var(--copper)}
+  button:hover{background:rgba(200,132,58,.09)}
+  button.w1{color:var(--cyan);border-color:var(--cyan)} button.w1:hover{background:rgba(107,176,192,.1)}
+  button.w0{color:var(--violet);border-color:var(--violet)} button.w0:hover{background:rgba(185,139,255,.1)}
+  .readout{font-family:'IBM Plex Mono',monospace;font-size:12.5px;margin-top:12px;padding:11px 13px;border:1px solid var(--line2);border-radius:3px;background:rgba(200,132,58,.03);line-height:1.7}
+  .readout b{color:var(--copper-hi)} .readout .g{color:var(--green)} .readout .bad{color:#e06b6b}
+  .prose{font-size:15px;color:var(--ink);max-width:74ch} .prose b{color:var(--copper-hi)}
+  .carriers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+  @media(max-width:640px){.carriers{grid-template-columns:1fr 1fr}}
+  .carrier{border:1px solid var(--line2);border-radius:4px;padding:11px 12px;background:rgba(200,132,58,.02);font-family:'IBM Plex Mono',monospace}
+  .carrier.on{border-color:var(--copper);background:rgba(200,132,58,.06)}
+  .carrier .nm{font-size:12px;color:var(--copper-hi)} .carrier .cr{font-size:11px;color:var(--dim);margin-top:3px}
+  .carrier.on .cr{color:var(--ink)}
+  .honest{border:1px solid var(--line);border-radius:4px;padding:15px 17px;margin-top:8px;background:rgba(200,132,58,.03)}
+  .honest h3{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--copper);margin:0 0 8px}
+  .honest p{font-size:13.5px;color:var(--dim);margin:6px 0} .honest b{color:var(--ink)}
+  footer{margin-top:44px;border-top:1px solid var(--line2);padding-top:18px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);line-height:1.9}
+  footer a{color:var(--copper)}
+</style></head><body>
+<div class="wrap">
+  <div class="top"><a href="https://davidwise01.github.io/ud0/">&#9664; UD0</a> · HEÚREMA · &#949;&#8016;&#961;&#951;&#956;&#945;, an invention · <a href="https://davidwise01.github.io/atlas/">the atlas</a></div>
+  <header>
+    <div class="eyebrow">a ROOT0 hardware disclosure · the fourth carrier</div>
+    <h1>SPINTRONIC</h1>
+    <p class="lede">A bit stored not as <b>charge</b> but as a <b>direction of spin</b>. This is a <b>spin-transfer-torque MRAM cell</b>: a spin-polarized current tips a tiny magnet's magnetization over an energy barrier from one stable pole to the other &mdash; governed by the <b>Landau&ndash;Lifshitz&ndash;Gilbert</b> equation. When the current stops, the direction stays. No refresh, no leakage: non-volatile memory written with spin.</p>
+  </header>
+
+  <section>
+    <h2>the switch · write a bit into a magnetization</h2>
+    <canvas id="cv" width="820" height="440" aria-label="the Bloch sphere of a magnetization vector precessing and switching under spin-transfer torque"></canvas>
+    <div class="controls">
+      <label>write current I / I<sub>c</sub> &mdash; <span class="val" id="iVal">1.60&times;</span><input type="range" id="iRange" min="0" max="3" step="0.05" value="1.6"></label>
+      <label>Gilbert damping &alpha; &mdash; <span class="val" id="aVal">0.10</span><input type="range" id="aRange" min="0.02" max="0.4" step="0.01" value="0.10"></label>
+    </div>
+    <div class="btns">
+      <button class="w1" id="w1">&#9650; write 1 (up spin)</button>
+      <button class="w0" id="w0">&#9660; write 0 (down spin)</button>
+      <button id="pulseBtn">&#8623; flip to the other bit</button>
+      <button id="restBtn">&#8635; let it relax</button>
+    </div>
+    <div class="readout" id="readout">The magnetization <b>m</b> (copper arrow) sits at one of two poles &mdash; that is the stored bit. Press <b style="color:var(--cyan)">write 1</b> or <b style="color:var(--violet)">write 0</b> to drive a spin-torque current: above the threshold I<sub>c</sub> it precesses over the equator and switches; below it, damping pulls it back and the write <b>fails</b>. Try the current slider under and over 1&times;.</div>
+    <p class="prose" style="margin-top:16px">The dynamics are real: the arrow <b>precesses</b> around the effective field (the fast spiral), <b>damping</b> &alpha; spirals it toward the nearest easy-axis pole (the two energy minima = the two bit states), and the <b>spin-transfer torque</b> from the polarized current pushes against that damping. Slonczewski and Berger showed (1996) a spin-polarized current transfers angular momentum to the free layer &mdash; enough of it, and the magnet flips. That flip, made a memory cell, is <b>STT-MRAM</b>: shipping silicon today (embedded MRAM at TSMC, Samsung, Everspin).</p>
+  </section>
+
+  <section>
+    <h2>the fourth carrier · completing the tensor</h2>
+    <div class="carriers">
+      <div class="carrier"><div class="nm">electronic</div><div class="cr">carrier: charge (the electron). volatile &mdash; leaks, needs refresh.</div></div>
+      <div class="carrier"><div class="nm">photonic</div><div class="cr">carrier: light (the photon). speed, bandwidth, no resistive heat.</div></div>
+      <div class="carrier"><div class="nm">phononic</div><div class="cr">carrier: lattice vibration (the phonon). heat &amp; sound as signal.</div></div>
+      <div class="carrier on"><div class="nm">spintronic &#9666; here</div><div class="cr">carrier: spin (the electron's magnetic moment). non-volatile.</div></div>
+    </div>
+    <p class="prose" style="margin-top:14px">Ask what physically <i>carries</i> the information and you get a family: <b>charge &rarr; electronic, light &rarr; photonic, lattice-vibration &rarr; phononic, spin &rarr; spintronic</b>. This sphere is the fourth. (Push it exotic and the carrier becomes the graviton &mdash; the <a href="https://davidwise01.github.io/gravity-processor/" style="color:var(--cyan)">gravity</a> outlier of the set.) The point of spin as a carrier: a magnetization direction is <b>non-volatile</b> &mdash; it holds its bit with the power off &mdash; where charge on a capacitor drains and must be refreshed.</p>
+  </section>
+
+  <section>
+    <h2>honest two-layer</h2>
+    <div class="honest">
+      <p><b>Real, and correctly simulated:</b> the Landau&ndash;Lifshitz&ndash;Gilbert equation (precession + Gilbert damping) with a Slonczewski spin-transfer-torque term is the standard macrospin model of a magnetic free layer; the current threshold I<sub>c</sub> above which the cell switches (the spin-torque anti-damping must exceed the Gilbert damping) is a genuine feature, verified here to switch above 1&times; and fail below; STT-MRAM is real, shipping non-volatile memory. The canvas integrates the actual LLG dynamics.</p>
+      <p><b>A reduced model / disclosure:</b> this is a single-macrospin cell (one coherent magnetization). Real devices add thermal fluctuations, sub-volume incoherent reversal, tunnel-magnetoresistance readout, and process variation; the numbers here are normalized (I in units of the threshold), not a datasheet. The "ROOT0 spintronic device" framing is a design/disclosure standing on established magnetism, not a fabricated part.</p>
+      <p style="color:var(--ink);border-top:1px solid var(--line2);padding-top:8px">To disclose a design is real work; it is not a granted patent or a fabricated device. Built to complete David's carrier tensor {photonic, gravity, electronic, phononic} &mdash; the missing pillar is spin.</p>
+    </div>
+  </section>
+
+  <footer>
+    SPINTRONIC · HEÚREMA · David Lee Wise (ROOT0) / TriPod LLC · with AVAN · CC-BY-ND-4.0<br>
+    <a href="https://davidwise01.github.io/ud0/">&larr; the biosphere</a> · the fourth carrier of the tensor
+  </footer>
+</div>
+<script>
+"use strict";
+(function(){
+  var cv=document.getElementById("cv"), ctx=cv.getContext("2d");
+  var W=cv.width, H=cv.height, cx=W*0.4, cy=H*0.52, R=Math.min(W*0.32,H*0.40);
+  var m=[0.05,0.05,0.997];            // free-layer magnetization, near +z (bit 1) with a tiny thermal transverse
+  var Icur=1.6, alpha=0.10, hk=1.0, dt=0.08;
+  var drive=0, writeTimer=0, status="idle", trail=[], anim=null;   // drive: 0 idle, +1 writing up, -1 writing down
+  var iR=document.getElementById("iRange"), aR=document.getElementById("aRange"),
+      iVal=document.getElementById("iVal"), aVal=document.getElementById("aVal"), readout=document.getElementById("readout");
+
+  function cross(a,b){return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];}
+  function norm(v){var n=Math.hypot(v[0],v[1],v[2])||1; return [v[0]/n,v[1]/n,v[2]/n];}
+
+  // LLG + Slonczewski STT (macrospin). Switching threshold aj = Icur*alpha*hk exceeds Gilbert damping
+  // exactly when Icur > 1 (verified in node: switches above 1x, fails below).
+  function physStep(){
+    var h=[0.12*m[0], 0, hk*m[2]];                        // small hard-axis + uniaxial anisotropy on z
+    var mxh=cross(m,h), mmxh=cross(m,mxh);
+    var dm=[-mxh[0]-alpha*mmxh[0], -mxh[1]-alpha*mmxh[1], -mxh[2]-alpha*mmxh[2]];
+    if(drive!==0){
+      var mmxp=cross(m,cross(m,[0,0,drive])), aj=Icur*alpha*hk;
+      dm[0]-=aj*mmxp[0]; dm[1]-=aj*mmxp[1]; dm[2]-=aj*mmxp[2];
+    }
+    m=norm([m[0]+dt*dm[0], m[1]+dt*dm[1], m[2]+dt*dm[2]]);
+  }
+
+  function proj(v){ return [cx + R*(v[0] + 0.32*v[1]), cy - R*(v[2] + 0.16*v[1])]; }
+
+  function frame(){
+    for(var s=0;s<4;s++) physStep();                      // substeps -> faster switching wall-clock
+    if(drive!==0){
+      writeTimer-=4;
+      if(Math.sign(m[2])===drive){ drive=0; status="ok"; }
+      else if(writeTimer<=0){ drive=0; status="fail"; }
+    }
+    trail.push([m[0],m[1],m[2]]); if(trail.length>110)trail.shift();
+    draw(); updateReadout();
+    anim=requestAnimationFrame(frame);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H); ctx.fillStyle="#100c07"; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle="rgba(200,132,58,.22)"; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.ellipse(cx,cy,R,R,0,0,7); ctx.stroke();
+    ctx.strokeStyle="rgba(224,107,107,.28)"; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.ellipse(cx,cy,R,R*0.30,0,0,7); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle="rgba(200,132,58,.12)"; ctx.beginPath(); ctx.ellipse(cx,cy,R*0.30,R,0,0,7); ctx.stroke();
+    var pu=proj([0,0,1]), pd=proj([0,0,-1]);
+    ctx.fillStyle="#6bb0c0"; ctx.beginPath(); ctx.arc(pu[0],pu[1],4,0,7); ctx.fill();
+    ctx.fillStyle="#b98bff"; ctx.beginPath(); ctx.arc(pd[0],pd[1],4,0,7); ctx.fill();
+    ctx.font="13px 'IBM Plex Mono',monospace"; ctx.textAlign="center";
+    ctx.fillStyle="#6bb0c0"; ctx.fillText("|1>  up spin  (bit = 1)", cx, pu[1]-12);
+    ctx.fillStyle="#b98bff"; ctx.fillText("|0>  down spin  (bit = 0)", cx, pd[1]+22);
+    ctx.textAlign="left"; ctx.fillStyle="rgba(224,107,107,.7)"; ctx.fillText("equator = energy barrier", cx+R*0.5, cy-4);
+    if(trail.length>1){ ctx.beginPath(); var p0=proj(trail[0]); ctx.moveTo(p0[0],p0[1]);
+      for(var i=1;i<trail.length;i++){var pp=proj(trail[i]); ctx.lineTo(pp[0],pp[1]);}
+      ctx.strokeStyle="rgba(224,162,78,.5)"; ctx.lineWidth=1.6; ctx.stroke(); }
+    var tip=proj(m);
+    ctx.strokeStyle="#e0a24e"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(tip[0],tip[1]); ctx.stroke();
+    ctx.fillStyle="#e0a24e"; ctx.beginPath(); ctx.arc(tip[0],tip[1],6,0,7); ctx.fill();
+    ctx.fillStyle="#100c07"; ctx.beginPath(); ctx.arc(cx,cy,3,0,7); ctx.fill();
+    ctx.font="12px 'IBM Plex Mono',monospace"; ctx.fillStyle="#a99a86";
+    ctx.fillText("m - the free-layer magnetization (LLG + spin-transfer torque)",12,22);
+    if(drive!==0){ ctx.fillStyle=drive>0?"#6bb0c0":"#b98bff";
+      ctx.fillText("writing "+(drive>0?"1 up":"0 down")+"  ·  I = "+Icur.toFixed(2)+" Ic "+(Icur>1?"(above threshold)":"(below - will fail)"), 12, 40); }
+  }
+
+  function bit(){ return m[2]>=0 ? 1 : 0; }
+  function updateReadout(){
+    var above=Icur>1.0;
+    var line1 = "stored bit: <b>"+bit()+"</b> (m dot z = "+m[2].toFixed(2)+") &nbsp;·&nbsp; set current <b>"+Icur.toFixed(2)+" Ic</b> - "+
+      (above ? "<span class='g'>above threshold: a write switches</span>" : "<span class='bad'>below threshold: a write fails (damping wins)</span>");
+    var line2;
+    if(drive!==0) line2 = "<b>writing...</b> the spin-torque is fighting the damping - "+(above?"it will cross the barrier":"it will wobble and give up");
+    else if(status==="ok") line2 = "<span class='g'>written.</span> the cell switched and now holds bit <b>"+bit()+"</b> with the current off - <b>non-volatile</b>.";
+    else if(status==="fail") line2 = "<span class='bad'>write failed.</span> below Ic the torque could not cross the barrier; damping pulled m back. Raise the current over 1x and retry.";
+    else line2 = "with the current off, m holds its pole indefinitely - <b>non-volatile</b>. That is the spintronic bit.";
+    readout.innerHTML = line1 + "<br>" + line2;
+  }
+
+  function write(target){
+    if(drive!==0) return;
+    m=norm([m[0]+(Math.random()*2-1)*0.05, m[1]+(Math.random()*2-1)*0.05, m[2]]);  // thermal seed
+    drive=target; writeTimer=760; status="writing"; if(!anim) frame();
+  }
+  document.getElementById("w1").onclick=function(){ write(1); };
+  document.getElementById("w0").onclick=function(){ write(-1); };
+  document.getElementById("pulseBtn").onclick=function(){ write(-(Math.sign(m[2])||1)); };
+  document.getElementById("restBtn").onclick=function(){ drive=0; status="idle"; };
+  iR.oninput=function(){ Icur=+iR.value; iVal.textContent=Icur.toFixed(2)+"x"; updateReadout(); };
+  aR.oninput=function(){ alpha=+aR.value; aVal.textContent=alpha.toFixed(2); };
+
+  draw(); updateReadout();
+  anim=requestAnimationFrame(frame);
+})();
+</script>
+</body></html>
