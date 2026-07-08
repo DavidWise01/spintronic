@@ -4,6 +4,6 @@ slug  : spintronic
 seal  : ecb0296851969ee1f97631b2419167babf8fa05a9e613c2781bb603e1780c2bc
 prev  : 6b25ffff20d8e6d2e93af404b854ad50f46005c058afd84d1024afe099fcd53e
 link  : 0367b0d712f893ead90e66055e366f1709bb43d00fb2ac3e116558bf19cb0df1
-head  : 3447d3a0533aaf1e29a8bdc67a9774884fb3ae9dbc8a17064b7a008ca3c4ec90
+head  : 13f9ace173ef2e60af38912ba329b4afcb5a38b84a0e4495e8d30327f8c99cc2
 
 — the tether: link = sha256(index|slug|seal|prev). the chain head commits to the whole corpus.
