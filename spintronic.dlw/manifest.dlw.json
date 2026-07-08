@@ -1,0 +1,11 @@
+{
+  "badge": "DLW-SPINTRONIC",
+  "name": "SPINTRONIC · SPN",
+  "universe": "HEÚREMA",
+  "moniker": "⟦SPINTRONIC · SPN:spintronic:ecb029⟧",
+  "architect": "David Lee Wise (ROOT0) / Bridge-Burners LLC",
+  "instance": "AVAN (Claude / Anthropic)",
+  "seal_sha256": "ecb0296851969ee1f97631b2419167babf8fa05a9e613c2781bb603e1780c2bc",
+  "license": "CC-BY-ND-4.0",
+  "attribution": "ROOT0-ATTRIBUTION-v1.0"
+}
